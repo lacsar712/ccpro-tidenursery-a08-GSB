@@ -46,11 +46,24 @@ docker compose up --build
 3. **Pond 育苗塘**：`hatcheryId`、`pondCode`、`species`、`volumeM3`、`status(stocked|dry|quarantine)`；同场 `pondCode` 唯一
 4. **WaterSample 水质样**：`pondId`、`sampledAt`、`tempC`、`salinityPpt`、`doMgL`、`ph`、`notes`；`doMgL > 0` 且 `ph ∈ [6,9]`，否则返回 **400**
 5. **FeedEvent 投喂**：`pondId`、`fedAt`、`feedType`、`amountKg`、`operatorName`
-6. **Dashboard**：塘总数、quarantine 数、近 24h 采样数、近 7 日投喂总量 kg
+6. **Microscopy 生物絮团镜检**：批次挂塘口，镜检条目决定能否继续投喂
+   - 批次字段：所属塘口、开检日（按**东八区**计算）、封检时刻（可空）、主检人；**同塘开检日唯一**，重复开检返回 **409**
+   - 镜检条目：批次编号、视野序号、絮团密度等级（`sparse 稀` / `medium 中` / `dense 密`）、观察时刻；未封批次内视野序号唯一，重复返回 **409**
+   - **封检规则**（`POST /api/microscopy-batches/{id}/close`）：
+     - 至少 **3 个视野**，且**不得全是「密」**；不满足时返回 **409**，且**封检时刻保持为空**
+     - 封检成功后写入封检时刻，此后**不可再追加视野**（追加返回 **409**）
+   - **投喂拦截**：塘口存在未封检批次时禁止新建投喂（`POST /api/feed-events` 返回 **409**），封检后自动恢复；拦截与塘口列表的「未封镜检」标记共用同一查询（`app/services/microscopy.py`）
+7. **Dashboard**：塘总数、quarantine 数、近 24h 采样数、近 7 日投喂总量 kg
+
+### 种子数据
+
+种子中 A-01 塘有一个**东八区今日开检、尚未封检**的镜检批次（2 个视野：稀、中，未达 3 个），因此该塘口在初始状态下禁止新建投喂；B-01 塘有一个昨日已封检批次（3 个视野：稀、中、密）作为对照。
 
 ## 前端页面
 
-Login · Dashboard · Hatcheries · Ponds · WaterSamples · FeedEvents
+Login · Dashboard · Hatcheries · Ponds · WaterSamples · FeedEvents · Microscopy（絮团镜检）
+
+侧栏「絮团镜检」可开检批次、追加视野、封检；塘口列表每行显示是否有未封镜检（「未封镜检 · 禁投喂」标记）。
 
 ## 本地开发（可选）
 

@@ -138,6 +138,7 @@ export default function Ponds() {
               <th>品种</th>
               <th>体积 m³</th>
               <th>状态</th>
+              <th>镜检</th>
               <th />
             </tr>
           </thead>
@@ -151,6 +152,13 @@ export default function Ponds() {
                 <td>{r.volumeM3}</td>
                 <td>
                   <span className={`badge ${r.status}`}>{r.status}</span>
+                </td>
+                <td>
+                  {r.hasOpenMicroscopy ? (
+                    <span className="badge quarantine">未封镜检 · 禁投喂</span>
+                  ) : (
+                    <span className="muted">—</span>
+                  )}
                 </td>
                 <td>
                   <button className="btn ghost" onClick={() => remove(r.id)}>

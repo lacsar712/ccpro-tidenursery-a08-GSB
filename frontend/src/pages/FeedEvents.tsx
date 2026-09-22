@@ -79,6 +79,12 @@ export default function FeedEvents() {
       </header>
       {error && <div className="error">{error}</div>}
 
+      {ponds.find((p) => p.id === form.pondId)?.hasOpenMicroscopy && (
+        <div className="error">
+          该塘口存在未封检的镜检批次，完成封检前禁止新建投喂（提交将被拦截）。
+        </div>
+      )}
+
       <form className="panel form-grid" onSubmit={onSubmit}>
         <label>
           塘口
@@ -90,6 +96,7 @@ export default function FeedEvents() {
             {ponds.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.pondCode} · {p.species}
+                {p.hasOpenMicroscopy ? '（未封镜检·禁投喂）' : ''}
               </option>
             ))}
           </select>

@@ -278,6 +278,36 @@ th {
   color: #1a7a6c;
 }
 
+.batch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.batch-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.batch-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.batch-fields {
+  box-shadow: none;
+}
+
+.field-add {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, auto));
+  gap: 10px;
+  align-items: end;
+}
+
 .login-page {
   min-height: 100vh;
   display: grid;
@@ -335,6 +365,10 @@ th {
   .stat-grid,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .field-add {
+    grid-template-columns: 1fr 1fr;
   }
 
   .form-grid .span-2 {

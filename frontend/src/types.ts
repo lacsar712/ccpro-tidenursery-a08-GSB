@@ -19,6 +19,26 @@ export type Pond = {
   species: string
   volumeM3: number
   status: 'stocked' | 'dry' | 'quarantine'
+  hasOpenMicroscopy?: boolean
+}
+
+export type DensityLevel = 'sparse' | 'medium' | 'dense'
+
+export type MicroscopyField = {
+  id: number
+  batchId: number
+  viewSeq: number
+  density: DensityLevel
+  observedAt: string
+}
+
+export type MicroscopyBatch = {
+  id: number
+  pondId: number
+  openedOn: string
+  closedAt: string | null
+  chiefInspector: string
+  fields: MicroscopyField[]
 }
 
 export type WaterSample = {
