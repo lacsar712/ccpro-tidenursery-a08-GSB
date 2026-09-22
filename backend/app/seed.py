@@ -4,6 +4,8 @@ from app.auth import hash_password
 from app.database import SessionLocal
 from app.models.feed_event import FeedEvent
 from app.models.hatchery import Hatchery
+from app.models.microscopy_batch import MicroscopyBatch
+from app.models.microscopy_view import MicroscopyView
 from app.models.pond import Pond
 from app.models.user import User
 from app.models.water_sample import WaterSample
@@ -77,6 +79,15 @@ def seed() -> None:
             db.flush()
 
             now = datetime.now(timezone.utc)
+            cst_today = now.astimezone(timezone(timedelta(hours=8))).date()
+            open_batch = MicroscopyBatch(
+                pond_id=p1.id,
+                inspected_on=cst_today,
+                sealed_at=None,
+                chief_inspector="水质技术员",
+            )
+            db.add(open_batch)
+            db.flush()
             db.add_all(
                 [
                     WaterSample(
@@ -126,6 +137,18 @@ def seed() -> None:
                         feed_type="微藻饲料",
                         amount_kg=2.5,
                         operator_name="水质技术员",
+                    ),
+                    MicroscopyView(
+                        batch_id=open_batch.id,
+                        view_no=1,
+                        floc_density="sparse",
+                        observed_at=now - timedelta(hours=2),
+                    ),
+                    MicroscopyView(
+                        batch_id=open_batch.id,
+                        view_no=2,
+                        floc_density="medium",
+                        observed_at=now - timedelta(hours=1),
                     ),
                 ]
             )

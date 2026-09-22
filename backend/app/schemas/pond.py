@@ -34,3 +34,4 @@ class PondOut(BaseModel):
     species: str
     volume_m3: float = Field(serialization_alias="volumeM3")
     status: PondStatus
+    has_open_microscopy: bool = Field(default=False, serialization_alias="hasOpenMicroscopy")

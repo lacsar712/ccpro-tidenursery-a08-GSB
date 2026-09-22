@@ -278,6 +278,47 @@ th {
   color: #1a7a6c;
 }
 
+.badge.microscopy-open {
+  background: #fdeceb;
+  color: var(--danger);
+}
+
+.badge.sealed {
+  background: #e3f7f4;
+  color: #1a7a6c;
+}
+
+.badge.open {
+  background: #fdeceb;
+  color: var(--danger);
+}
+
+.form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.form-inline label {
+  flex: 1 1 140px;
+}
+
+.batch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .login-page {
   min-height: 100vh;
   display: grid;

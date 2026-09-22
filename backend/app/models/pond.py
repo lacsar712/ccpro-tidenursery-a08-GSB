@@ -24,3 +24,6 @@ class Pond(Base):
     feed_events: Mapped[List["FeedEvent"]] = relationship(
         "FeedEvent", back_populates="pond", cascade="all, delete-orphan"
     )
+    microscopy_batches: Mapped[List["MicroscopyBatch"]] = relationship(
+        "MicroscopyBatch", back_populates="pond", cascade="all, delete-orphan"
+    )

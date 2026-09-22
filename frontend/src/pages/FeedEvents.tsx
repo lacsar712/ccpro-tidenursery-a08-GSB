@@ -71,6 +71,9 @@ export default function FeedEvents() {
     return p ? `${p.pondCode} (${p.species})` : `#${id}`
   }
 
+  const selectedPond = ponds.find((p) => p.id === form.pondId)
+  const blockedByMicroscopy = selectedPond?.hasOpenMicroscopy === true
+
   return (
     <div>
       <header className="page-header">
@@ -90,6 +93,7 @@ export default function FeedEvents() {
             {ponds.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.pondCode} · {p.species}
+                {p.hasOpenMicroscopy ? '（有未封镜检，禁投喂）' : ''}
               </option>
             ))}
           </select>
@@ -130,10 +134,20 @@ export default function FeedEvents() {
             required
           />
         </label>
-        <button type="submit" className="btn primary">
+        <button
+          type="submit"
+          className="btn primary"
+          disabled={blockedByMicroscopy}
+          title={blockedByMicroscopy ? '该塘口存在未封检镜检批次，封检后恢复投喂' : undefined}
+        >
           登记投喂
         </button>
       </form>
+      {blockedByMicroscopy && (
+        <div className="error">
+          塘口 {selectedPond?.pondCode} 存在未封检的絮团镜检批次：封检通过前禁止新建投喂，请先至「絮团镜检」完成封检。
+        </div>
+      )}
 
       <div className="table-wrap">
         <table>

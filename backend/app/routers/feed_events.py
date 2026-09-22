@@ -9,6 +9,7 @@ from app.models.feed_event import FeedEvent
 from app.models.pond import Pond
 from app.models.user import User
 from app.schemas.feed_event import FeedEventCreate, FeedEventOut
+from app.services.microscopy import pond_has_open_batch
 
 router = APIRouter(prefix="/api/feed-events", tags=["feed-events"])
 
@@ -34,6 +35,11 @@ def create_event(
     pond = db.query(Pond).filter(Pond.id == payload.pond_id).first()
     if not pond:
         raise HTTPException(status_code=400, detail="塘口不存在")
+    if pond_has_open_batch(db, payload.pond_id):
+        raise HTTPException(
+            status_code=409,
+            detail="该塘口存在未封检的絮团镜检批次，封检通过前禁止新建投喂",
+        )
     item = FeedEvent(
         pond_id=payload.pond_id,
         fed_at=payload.fed_at,

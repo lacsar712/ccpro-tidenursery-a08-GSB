@@ -19,6 +19,7 @@ export type Pond = {
   species: string
   volumeM3: number
   status: 'stocked' | 'dry' | 'quarantine'
+  hasOpenMicroscopy?: boolean
 }
 
 export type WaterSample = {
@@ -39,6 +40,24 @@ export type FeedEvent = {
   feedType: string
   amountKg: number
   operatorName: string
+}
+
+export type FlocDensity = 'sparse' | 'medium' | 'dense'
+
+export type MicroscopyView = {
+  id: number
+  viewNo: number
+  flocDensity: FlocDensity
+  observedAt: string
+}
+
+export type MicroscopyBatch = {
+  id: number
+  pondId: number
+  inspectedOn: string
+  sealedAt: string | null
+  chiefInspector: string
+  views: MicroscopyView[]
 }
 
 export type DashboardStats = {
